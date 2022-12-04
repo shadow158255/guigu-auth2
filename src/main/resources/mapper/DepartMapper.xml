@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.worktext1.mapper.DepartMapper">
+
+    <!--int insert(Depart depart);-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="departId">
+        insert into sys_department(
+            pid,code,name,sort,
+            add_time,add_ip,add_user_id,last_edit_time,last_edit_ip,
+            last_edit_by,is_del
+        )value (
+            #{pid},#{code},#{name},#{sort},
+            #{addTime},#{addIp},#{addUserId},#{lastEditTime},#{lastEditIp},
+            #{lastEditBy},#{isDel}
+            );
+    </insert>
+
+    <!--int deleteById(Long id);-->
+    <delete id="deleteById">
+        DELETE FROM
+            sys_department
+        WHERE
+            depart_id = #{departId}
+    </delete>
+
+
+    <!--int countByName(String name);-->
+    <select id="countByName" resultType="int">
+        select count(*) from sys_department where name=#{name}
+    </select>
+
+    <!--int update(Depart depart);-->
+    <update id="update">
+        update sys_department
+        <set>
+            <if test="pid != null">
+                pid = #{pid},
+            </if>
+            <if test="code != null">
+                code = #{code},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="addTime != null">
+                add_time = #{addTime},
+            </if>
+            <if test="addIp != null">
+                add_ip = #{addIp},
+            </if>
+            <if test="addUserId != null">
+                add_user_id = #{addUserId},
+            </if>
+            <if test="lastEditTime != null">
+                last_edit_time = #{lastEditTime},
+            </if>
+            <if test="lastEditIp != null">
+                last_edit_ip = #{lastEditIp},
+            </if>
+            <if test="lastEditBy != null">
+                last_edit_by = #{lastEditBy},
+            </if>
+            <if test="isDel != null">
+                is_del = #{isDel},
+            </if>
+        </set>
+            where  depart_id = #{departId}
+    </update>
+
+    <!--DepartStandardById selectByDepartId(Long departId);-->
+    <select id="selectByDepartId" resultMap="getStandardById">
+        SELECT
+            <include refid="getDepartVO"/>
+        FROM
+            sys_department
+        WHERE
+        depart_id = #{departId}
+    </select>
+
+    <sql id="getDepartVO">
+        <if test="true">
+            depart_id, pid,code,name,sort,is_del/*注意：最后一个词加逗号会报错*/
+        </if>
+    </sql>
+    
+    <resultMap id="getStandardById" type="com.example.worktext1.pojo.vo.DepartStandardVO">
+        <id column="depart_id" property="departId"/>
+    </resultMap>
+
+
+
+</mapper>
